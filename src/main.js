@@ -5,6 +5,8 @@ const path = require('node:path');
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+// Disable Chromium's autofill feature
+app.commandLine.appendSwitch('disable-features', 'AutofillServerCommunication');
 
 const createWindow = () => {
   // Create the browser window.
@@ -13,6 +15,9 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      contextIsolation: true, // Ensure context isolation for security
+      nodeIntegration: false, // Disable Node.js integration in the renderer
+      spellcheck: false, // Disable spellcheck
     },
   });
 
@@ -21,7 +26,16 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+    // Disable autofill
+  mainWindow.webContents.session.setPermissionRequestHandler((webContents, permission, callback) => {
+    if (permission === 'autofill') {
+      return callback(false); // Deny autofill permission
+    }
+    callback(true);
+  });
 };
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

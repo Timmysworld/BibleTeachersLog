@@ -51,6 +51,7 @@ const SignIn = () => {
           label="Username"
           placeholder="Enter your username"
           className="w-full p-2 border border-gray-300 rounded"
+          autoComplete="off"
         />
         {errors.username && (
         <div className="text-red-500">{errors.username.message}</div>
@@ -62,6 +63,7 @@ const SignIn = () => {
           label="Password"
           placeholder="Enter your password"
           className="w-full p-2 border border-gray-300 rounded"
+          autoComplete="off"
         />
         {errors.password && (
         <div className="text-red-500">{errors.password.message}</div>
